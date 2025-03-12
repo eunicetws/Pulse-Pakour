@@ -18,11 +18,13 @@ public class Main {
         window.setResizable(true);
         window.setTitle("Pulse Pakour");
 
-        GamePanel gamePanel = new GamePanel();
+        GamePanel gamePanel = new GamePanel();  
         window.add(gamePanel);
 
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);
+        window.setLocationRelativeTo(null); // screen will appear in the middle
+        window.setVisible(true);            // allow us to see the window
+
+        gamePanel.startGameThread(); // start game
     }
 
 }
