@@ -33,7 +33,7 @@ public class UI extends JFrame {
         // Button Actions
         playButton.addActionListener(e -> {
             dispose(); // Close menu
-            Main.startGame(); // Start Game
+            
         });
 
         exitButton.addActionListener(e -> System.exit(0));
