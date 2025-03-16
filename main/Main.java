@@ -4,18 +4,22 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
+import main.GamePanel;
+
 public class Main {
     public static int WIDTH, HEIGHT;
     public static int WIDTH_RATIO = 16, HEIGHT_RATIO = 9;
+    GamePanel gp;
     
     public static void main(String[] args) {
         JFrame window = new JFrame();
+        GamePanel gp = new GamePanel();
         
         window.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        window.setMinimumSize(new Dimension( GamePanel.SCRREN_WIDTH, GamePanel.SCRREN_HEIGHT));
+        window.setMinimumSize(new Dimension( gp.SCRREN_WIDTH, gp.SCRREN_HEIGHT));
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(true);
+        window.setResizable(false);
         window.setTitle("Pulse Pakour");
 
         GamePanel gamePanel = new GamePanel();  
