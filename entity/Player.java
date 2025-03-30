@@ -1,6 +1,6 @@
 package entity;
 
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 
 
 import main.GamePanel;
@@ -9,31 +9,52 @@ import main.KeyHandler;
 public class Player {
     GamePanel gp;
     KeyHandler keyH;
-    Animation walking;
+    boolean up, down;
+    Animation idle, running, jump;
     int x, y;
 
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
-        walking = new Animation(10, 13,"/res/player_walk/Chara_BlueWalk");
+        running = new Animation(10, 13,"/res/player/player_walk/Chara_BlueWalk");
+        idle = new Animation(15, 19,"/res/player/player_idle/Chara - BlueIdle");
+
         //speed = (FPS / animation per sec) :. 60/6
 
         setDefaultValues();
     }
 
     public void setDefaultValues(){
-        x = 0;
-        y = (gp.TILE_SIZE)*4;
+        x = (gp.TILE_SIZE)*6;
+        y = (gp.TILE_SIZE)*5-10;
     }
 
     public void update(){
-        walking.updateAnimationTick();
+        updatePos();
+        idle.updateAnimationTick();
         x += 0;
         y += 0;
     }
 
-    public void draw(Graphics2D g2){
-        g2.drawImage(walking.getCurrentFrame(), x, y, gp.TILE_SIZE*2, gp.TILE_SIZE*2, null);
+    private void updatePos() {
+		if (up && !down) {
+			
+		} else if (!up && down) {
+			
+		}
+        
+	}
 
+    public void draw(Graphics g){
+        g.drawImage(idle.getCurrentFrame(), x, y, gp.TILE_SIZE*3, gp.TILE_SIZE*3, null);
+
+    }
+
+    private void isup(boolean up){
+        this.up = up;
+    }
+
+    private void isdown(boolean down){
+        this.down = down;
     }
 }

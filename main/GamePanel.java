@@ -2,30 +2,28 @@ package main;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import situations.SituationHandler;
 import entity.Player;
 
 public class GamePanel extends JPanel implements Runnable{
-    public final int TILESET = 40, SCALE = 3;
-    public final int TILE_SIZE = TILESET * SCALE;
+    public final int TILE_SIZE = 64;
+    public final int SCREEN_COL = 16, SCREEN_ROW = 9;
+    public final int SCREEN_WIDTH = TILE_SIZE * SCREEN_COL;
+    public final int SCREEN_HEIGHT = TILE_SIZE * SCREEN_ROW + 30;
 
-    public final int SCREEN_COL = 16, SCREEN_ROW = 12;
-    public final int SCRREN_WIDTH = TILE_SIZE * SCREEN_COL;
-    public final int SCRREN_HEIGHT = TILE_SIZE * SCREEN_ROW;
-
-    //FPS
-    final int FPS = 60;
-    final int UPS = 200;
+    private final int FPS = 60;
+    private final int UPS = 200;
 
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
     Player player = new Player(this, keyH);
+    SituationHandler sh = new SituationHandler(this);
 
     public GamePanel() {
-        this.setBackground(Color.white);
+        this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true); //GamePanel focuse on receiving key input
@@ -36,11 +34,12 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread.start();
     }
 
-    public void run(){
-        double timePerFrame = 1_000_000_000/FPS;
-        double timePerUpdate = 1_000_000_000/UPS;
-        
-        long previousTime = System.nanoTime();
+    public void run() {
+
+		double timePerFrame = 1000000000 / FPS;
+		double timePerUpdate = 1000000000 / UPS;
+
+		long previousTime = System.nanoTime();
 
 		int frames = 0;
 		int updates = 0;
@@ -73,39 +72,44 @@ public class GamePanel extends JPanel implements Runnable{
 				System.out.println("FPS: " + frames + " | UPS: " + updates);
 				frames = 0;
 				updates = 0;
-            }
-        }
 
-    }
+			}
+		}
+
+	}
 
     public void update(){
         player.update();
+        sh.update();
     }
 
-    private void drawGrid(Graphics2D g2) {
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        
+        drawGrid(g);
+        sh.draw(g);
+        player.draw(g);
+        
+        g.dispose();   //used to save memory by removing g2
+    }
+
+    private void drawGrid(Graphics g) {
         for (int row = 0; row < SCREEN_ROW; row++) {
             for (int col = 0; col < SCREEN_COL; col++) {
-                // Alternate between grey and white squares
+                // Alternating colors: light gray and dark gray
                 if ((row + col) % 2 == 0) {
-                    g2.setColor(Color.GRAY); // Grey color for even sum of row+col
+                    g.setColor(Color.WHITE);
                 } else {
-                    g2.setColor(Color.WHITE); // White color for odd sum of row+col
+                    g.setColor(Color.GRAY);
                 }
-
-                // Draw each square in the grid
-                g2.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                
+                int x = col * TILE_SIZE;
+                int y = row * TILE_SIZE;
+                
+                // Fill the tile with the selected color
+                g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
             }
         }
     }
 
-
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-
-        Graphics2D g2 = (Graphics2D)g;
-        drawGrid(g2);
-        player.draw(g2);
-        
-        g2.dispose();   //used to save memory by removing g2
-    }
 }

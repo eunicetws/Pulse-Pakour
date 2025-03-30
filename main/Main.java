@@ -13,14 +13,11 @@ public class Main {
     GamePanel gp;
     
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new UI()); // UI is now in the same package
-    }
-    public static void startGame() {
         JFrame window = new JFrame();
         GamePanel gp = new GamePanel();
         
-        window.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        window.setMinimumSize(new Dimension( gp.SCRREN_WIDTH, gp.SCRREN_HEIGHT));
+        window.setMinimumSize(new Dimension( gp.SCREEN_WIDTH, gp.SCREEN_HEIGHT));
+        window.pack();
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
