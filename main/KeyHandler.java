@@ -6,37 +6,47 @@ import java.awt.event.KeyListener;
 import entity.Player;
 
 public class KeyHandler implements KeyListener {
-    Player player;
-    GamePanel gp;
-    public boolean jump, crouch;
+    private GamePanel gp;
 
-    private void KeyHandler(GamePanel gp){
-        this.gp = gp;
-    }
+    public KeyHandler(GamePanel gp) {
+		this.gp = gp;
+	}
     
     @Override
-    public void keyPressed(KeyEvent e) {
-        int code = e.getKeyCode();
+	public void keyReleased(KeyEvent e) {
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_W:
+			gp.getPlayer().setUp(false);
+			break;
+		case KeyEvent.VK_A:
+			gp.getPlayer().setLeft(false);
+			break;
+		case KeyEvent.VK_S:
+			gp.getPlayer().setDown(false);
+			break;
+		case KeyEvent.VK_D:
+			gp.getPlayer().setRight(false);
+			break;
+		}
+	}
 
-        if (code == KeyEvent.VK_SPACE) { // Spacebar
-            
-        }
-        if (code == KeyEvent.VK_CONTROL) { // Ctrl key
-            crouch = true;
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        int code = e.getKeyCode();
-
-        if (code == KeyEvent.VK_SPACE) {
-            jump = false;
-        }
-        if (code == KeyEvent.VK_CONTROL) {
-            crouch = false;
-        }
-    }
+	@Override
+	public void keyPressed(KeyEvent e) {
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_W:
+			gp.getPlayer().setUp(true);
+			break;
+		case KeyEvent.VK_A:
+			gp.getPlayer().setLeft(true);
+			break;
+		case KeyEvent.VK_S:
+			gp.getPlayer().setDown(true);
+			break;
+		case KeyEvent.VK_D:
+			gp.getPlayer().setRight(true);
+			break;
+		}
+	}
 
     @Override
     public void keyTyped(KeyEvent e) {

@@ -7,13 +7,10 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class SituationHandler {
-
-    private GamePanel gp;
     private BufferedImage[] tile;
     private Situation S1;
 
-    public SituationHandler(GamePanel gp){
-        this.gp = gp;
+    public SituationHandler(){
         importTileSet();
         S1 = new Situation(LoadSave.getSData(LoadSave.S1));
     }
@@ -44,11 +41,10 @@ public class SituationHandler {
         // }
         
         
-
-        for(int j = 0; j * gp.TILE_SIZE < gp.SCREEN_HEIGHT - gp.TILE_SIZE; j++){
-            for(int i = 0; i * gp.TILE_SIZE < gp.SCREEN_WIDTH ; i++){
+        for(int j = 0; j * GamePanel.TILE_SIZE < GamePanel.SCREEN_HEIGHT - GamePanel.TILE_SIZE; j++){
+            for(int i = 0; i * GamePanel.TILE_SIZE < GamePanel.SCREEN_WIDTH ; i++){
                 int index = S1.getTilesIndex(i,j);
-                g.drawImage(tile[index], gp.TILE_SIZE * i, gp.TILE_SIZE * j, gp.TILE_SIZE, gp.TILE_SIZE, null);
+                g.drawImage(tile[index], GamePanel.TILE_SIZE * i, GamePanel.TILE_SIZE * j, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
             }
         }
         
@@ -56,5 +52,9 @@ public class SituationHandler {
 
     public void update(){
 
+    }
+
+    public Situation getCurrentSituation(){
+        return S1;
     }
 }

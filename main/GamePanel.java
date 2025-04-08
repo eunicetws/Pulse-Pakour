@@ -9,24 +9,25 @@ import situations.SituationHandler;
 import entity.Player;
 
 public class GamePanel extends JPanel implements Runnable{
-    public final int TILE_SIZE = 64;
-    public final int SCREEN_COL = 16, SCREEN_ROW = 9;
-    public final int SCREEN_WIDTH = TILE_SIZE * SCREEN_COL;
-    public final int SCREEN_HEIGHT = TILE_SIZE * SCREEN_ROW + 30;
+    public static final int TILE_SIZE = 64;
+    public static final int SCREEN_COL = 16, SCREEN_ROW = 9;
+    public static final int SCREEN_WIDTH = TILE_SIZE * SCREEN_COL;
+    public static final int SCREEN_HEIGHT = TILE_SIZE * SCREEN_ROW + 30;
 
     private final int FPS = 60;
     private final int UPS = 200;
 
-    KeyHandler keyH = new KeyHandler();
     Thread gameThread;
-    Player player = new Player(this, keyH);
-    SituationHandler sh = new SituationHandler(this);
+    KeyHandler keyH = new KeyHandler(this);
+    SituationHandler sh = new SituationHandler();
+    Player player = new Player(TILE_SIZE*6, TILE_SIZE*5-10, 128, 128);
 
     public GamePanel() {
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true); //GamePanel focuse on receiving key input
+        player.loadSituationData(sh.getCurrentSituation().getSData());
     }
 
     public void startGameThread(){
@@ -83,6 +84,10 @@ public class GamePanel extends JPanel implements Runnable{
         sh.update();
     }
 
+    public void windowFocusLost() {
+		player.resetDirBooleans();
+	}
+
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         
@@ -98,7 +103,7 @@ public class GamePanel extends JPanel implements Runnable{
             for (int col = 0; col < SCREEN_COL; col++) {
                 // Alternating colors: light gray and dark gray
                 if ((row + col) % 2 == 0) {
-                    g.setColor(Color.WHITE);
+                    g.setColor(Color.LIGHT_GRAY);
                 } else {
                     g.setColor(Color.GRAY);
                 }
@@ -112,4 +117,7 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
+    public Player getPlayer() {
+		return player;
+	}
 }

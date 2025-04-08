@@ -4,57 +4,102 @@ import java.awt.Graphics;
 
 
 import main.GamePanel;
-import main.KeyHandler;
+import static utilz.Collision.CanMoveHere;
 
-public class Player {
-    GamePanel gp;
-    KeyHandler keyH;
-    boolean up, down;
+public class Player extends Entity {
+    private boolean moving;
+    private boolean left, up, right, down;
+	private int TILE_SIZE = GamePanel.TILE_SIZE;
+    private int playerSpeed;
+	private int offset_y = 54;
+	private int offset_x = TILE_SIZE + 12;
     Animation idle, running, jump;
-    int x, y;
 
-    public Player(GamePanel gp, KeyHandler keyH){
-        this.gp = gp;
-        this.keyH = keyH;
-        running = new Animation(10, 13,"/res/player/player_walk/Chara_BlueWalk");
-        idle = new Animation(15, 19,"/res/player/player_idle/Chara - BlueIdle");
+    private int[][] situationData;
 
-        //speed = (FPS / animation per sec) :. 60/6
-
-        setDefaultValues();
+    public Player(int x, int y, int width, int height){
+        super(x, y, width, height);
+        running = new Animation(5, 13,"/res/player/player_walk/Chara_BlueWalk");
+        idle = new Animation(20, 19,"/res/player/player_idle/Chara - BlueIdle");
+		initHitbox(x + offset_x, y+offset_y, width / 2 - 28, height-45);
+        playerSpeed = 1;
     }
 
-    public void setDefaultValues(){
-        x = (gp.TILE_SIZE)*6;
-        y = (gp.TILE_SIZE)*5-10;
+    public void loadSituationData(int[][] situationData){
+        this.situationData = situationData;
     }
 
     public void update(){
         updatePos();
-        idle.updateAnimationTick();
-        x += 0;
-        y += 0;
+        running.updateAnimationTick();
+    }
+
+    public void draw(Graphics g){
+        g.drawImage(running.getCurrentFrame(), (int) hitbox.x-offset_x, (int) hitbox.y-offset_y, TILE_SIZE*3, TILE_SIZE*3, null);
+        drawHitbox(g);
     }
 
     private void updatePos() {
-		if (up && !down) {
-			
-		} else if (!up && down) {
-			
+		moving = false;
+		if (!left && !right && !up && !down)
+			return;
+
+		float xSpeed = 0, ySpeed = 0;
+
+		if (left && !right)
+			xSpeed = -playerSpeed;
+		else if (right && !left)
+			xSpeed = playerSpeed;
+
+		if (up && !down)
+			ySpeed = -playerSpeed;
+		else if (down && !up)
+			ySpeed = playerSpeed;
+
+		if (CanMoveHere(hitbox.x + xSpeed, hitbox.y + ySpeed, hitbox.width, hitbox.height, situationData)) {
+			hitbox.x += xSpeed;
+			hitbox.y += ySpeed;
+			moving = true;
 		}
-        
+    }
+
+    public void resetDirBooleans() {
+		left = false;
+		right = false;
+		up = false;
+		down = false;
 	}
 
-    public void draw(Graphics g){
-        g.drawImage(idle.getCurrentFrame(), x, y, gp.TILE_SIZE*3, gp.TILE_SIZE*3, null);
+    public boolean isLeft() {
+		return left;
+	}
 
-    }
+	public void setLeft(boolean left) {
+		this.left = left;
+	}
 
-    private void isup(boolean up){
-        this.up = up;
-    }
+	public boolean isUp() {
+		return up;
+	}
 
-    private void isdown(boolean down){
-        this.down = down;
-    }
+	public void setUp(boolean up) {
+		this.up = up;
+	}
+
+	public boolean isRight() {
+		return right;
+	}
+
+	public void setRight(boolean right) {
+		this.right = right;
+	}
+
+	public boolean isDown() {
+		return down;
+	}
+
+	public void setDown(boolean down) {
+		this.down = down;
+	}
+    
 }
