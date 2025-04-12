@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements Runnable{
     Thread gameThread;
     KeyHandler keyH = new KeyHandler(this);
     SituationHandler sh = new SituationHandler();
-    Player player = new Player(TILE_SIZE*6, TILE_SIZE*5-10, 128, 128);
+    Player player = new Player(TILE_SIZE*6, TILE_SIZE*5-10, 36, 83);
 
     public GamePanel() {
         this.setBackground(Color.black);

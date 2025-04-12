@@ -3,8 +3,6 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import entity.Player;
-
 public class KeyHandler implements KeyListener {
     private GamePanel gp;
 
@@ -15,7 +13,7 @@ public class KeyHandler implements KeyListener {
     @Override
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
-		case KeyEvent.VK_W:
+		case KeyEvent.VK_SPACE:
 			gp.getPlayer().setUp(false);
 			break;
 		case KeyEvent.VK_A:
@@ -33,7 +31,7 @@ public class KeyHandler implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
-		case KeyEvent.VK_W:
+		case KeyEvent.VK_SPACE:
 			gp.getPlayer().setUp(true);
 			break;
 		case KeyEvent.VK_A:
