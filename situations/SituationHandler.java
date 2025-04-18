@@ -7,12 +7,19 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class SituationHandler {
+    private int rows = GamePanel.SCREEN_HEIGHT / GamePanel.TILE_SIZE;
+    private int cols = GamePanel.SCREEN_WIDTH / GamePanel.TILE_SIZE;
+    private int sTick = 0, sSpeed = 10;
+    public static int sOffset = 0;
+    private int drawnCols = 0;
     private BufferedImage[] tile;
-    private Situation S1;
+    private Situation situation1, situation2;
+    private Situation S1, S2;
 
     public SituationHandler(){
         importTileSet();
         S1 = new Situation(LoadSave.getSData(LoadSave.S1));
+        S2 = new Situation(LoadSave.getSData(LoadSave.S2));
     }
 
     private void importTileSet(){
@@ -27,34 +34,46 @@ public class SituationHandler {
         tile[49]= null;
     }
 
-    public void draw(Graphics g){
+    public int updateAnimationTick(){
+        sTick++;
+        if (sTick >= sSpeed){
+            sTick = 0;
+            sOffset += 1;
+            if (sOffset >= 16 * GamePanel.TILE_SIZE){
+                sOffset = 0;
+            }
+        }
+        return sOffset;
+    }
 
-        // int z=0;
-        // for(int j=0; j<=6; j++){
-        //     for(int i=0; i<=6; i++){
-        //         g.drawImage(tile[z], gp.TILE_SIZE * i, gp.TILE_SIZE * j, gp.TILE_SIZE, gp.TILE_SIZE, null);
-        //         z++;
-        //         if (z>49){
-        //             break;
-        //         }
-        //     }
-        // }
-        
-        
-        for(int j = 0; j * GamePanel.TILE_SIZE < GamePanel.SCREEN_HEIGHT - GamePanel.TILE_SIZE; j++){
-            for(int i = 0; i * GamePanel.TILE_SIZE < GamePanel.SCREEN_WIDTH ; i++){
+    public void draw(Graphics g){
+        for(int j = 0; j  < rows; j++){
+            for(int i = 0; i < cols; i++){
                 int index = S1.getTilesIndex(i,j);
-                g.drawImage(tile[index], GamePanel.TILE_SIZE * i, GamePanel.TILE_SIZE * j, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
+                drawnCols = (GamePanel.TILE_SIZE * i) - sOffset;
+                g.drawImage(tile[index], drawnCols, GamePanel.TILE_SIZE * j, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
+            }
+        }
+
+        for(int j = 0; j < rows; j++){
+            for(int i = 0; i < GamePanel.SCREEN_COL - drawnCols / GamePanel.TILE_SIZE ; i++){
+                int index = S2.getTilesIndex(i, j);
+                int drawnCols2 = drawnCols + (GamePanel.TILE_SIZE * i) ;
+                g.drawImage(tile[index], drawnCols2, GamePanel.TILE_SIZE * j, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
             }
         }
         
     }
 
     public void update(){
-
+        updateAnimationTick();
     }
 
     public Situation getCurrentSituation(){
         return S1;
+    }
+
+    public Situation getCurrentSituation2(){
+        return S2;
     }
 }

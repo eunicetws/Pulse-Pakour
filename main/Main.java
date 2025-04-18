@@ -3,9 +3,6 @@ package main;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-
-import main.GamePanel;
 
 public class Main {
     public static int WIDTH, HEIGHT;
@@ -14,9 +11,8 @@ public class Main {
     
     public static void main(String[] args) {
         JFrame window = new JFrame();
-        GamePanel gp = new GamePanel();
         
-        window.setMinimumSize(new Dimension( gp.SCREEN_WIDTH, gp.SCREEN_HEIGHT));
+        window.setMinimumSize(new Dimension( GamePanel.SCREEN_WIDTH, GamePanel.SCREEN_HEIGHT));
         window.pack();
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

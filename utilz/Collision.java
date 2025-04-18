@@ -1,6 +1,7 @@
 package utilz;
 
 import main.GamePanel;
+import situations.SituationHandler;
 import java.awt.geom.Rectangle2D;
 
 public class Collision {
@@ -18,8 +19,8 @@ public class Collision {
 			return true;
 		if (y < 0 || y >= GamePanel.SCREEN_HEIGHT)
 			return true;
-
-		float xIndex = x / GamePanel.TILE_SIZE; // index of tiles by the x axis
+		
+		float xIndex = (x + SituationHandler.sOffset) / GamePanel.TILE_SIZE; // index of tiles by the x axis
 		float yIndex = y / GamePanel.TILE_SIZE; // index of tiles by the y axis
 
 		int value = situationData[(int) yIndex][(int) xIndex];

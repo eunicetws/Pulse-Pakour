@@ -5,8 +5,8 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import situations.SituationHandler;
-import entity.Player;
+import gamestates.Gamestate;
+import gamestates.Playing;
 
 public class GamePanel extends JPanel implements Runnable{
     public static final int TILE_SIZE = 64;
@@ -19,15 +19,14 @@ public class GamePanel extends JPanel implements Runnable{
 
     Thread gameThread;
     KeyHandler keyH = new KeyHandler(this);
-    SituationHandler sh = new SituationHandler();
-    Player player = new Player(TILE_SIZE*6, TILE_SIZE*5-10, 36, 83);
+    private Playing playing = new Playing(this);
+    
 
     public GamePanel() {
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true); //GamePanel focuse on receiving key input
-        player.loadSituationData(sh.getCurrentSituation().getSData());
     }
 
     public void startGameThread(){
@@ -79,45 +78,32 @@ public class GamePanel extends JPanel implements Runnable{
 
 	}
 
-    public void update(){
-        player.update();
-        sh.update();
-    }
+    public void update() {
+		switch (Gamestate.state) {
+		case MENU:
+			break;
+		case PLAYING:
+			playing.update();
+			break;
+		default:
+			break;
 
-    public void windowFocusLost() {
-		player.resetDirBooleans();
+		}
 	}
 
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-        
-        drawGrid(g);
-        sh.draw(g);
-        player.draw(g);
-        
-        g.dispose();   //used to save memory by removing g2
+    public void paintComponent(Graphics g) {
+        switch (Gamestate.state) {
+		case MENU:
+			break;
+		case PLAYING:
+			playing.draw(g);
+			break;
+		default:
+			break;
+		}
     }
 
-    private void drawGrid(Graphics g) {
-        for (int row = 0; row < SCREEN_ROW; row++) {
-            for (int col = 0; col < SCREEN_COL; col++) {
-                // Alternating colors: light gray and dark gray
-                if ((row + col) % 2 == 0) {
-                    g.setColor(Color.LIGHT_GRAY);
-                } else {
-                    g.setColor(Color.GRAY);
-                }
-                
-                int x = col * TILE_SIZE;
-                int y = row * TILE_SIZE;
-                
-                // Fill the tile with the selected color
-                g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-            }
-        }
-    }
-
-    public Player getPlayer() {
-		return player;
+	public Playing getPlaying() {
+		return playing;
 	}
 }

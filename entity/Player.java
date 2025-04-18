@@ -14,9 +14,9 @@ public class Player extends Entity {
 	
     private float playerSpeed = 1;
 	private float airSpeed = 0f;
-	private float gravity = 0.05f * 2f;
-	private float fallSpeedAfterCollision = 0.5f * 2f;
-	private float jumpSpeed = -2.25f * 2f;
+	private float gravity = 0.1f;
+	private float fallSpeedAfterCollision = 1f;
+	private float jumpSpeed = -4.5f;
 
 	private int offset_y = 54;
 	private int offset_x = TILE_SIZE + 12;
@@ -47,7 +47,7 @@ public class Player extends Entity {
 
     private void updatePos() {
 
-		float xSpeed = 0, ySpeed = 0;
+		float xSpeed = 0;
 		if (up)
 			jump();
 		if (!left && !right && !inAir)

@@ -3,6 +3,8 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import gamestates.Gamestate;
+
 public class KeyHandler implements KeyListener {
     private GamePanel gp;
 
@@ -12,36 +14,27 @@ public class KeyHandler implements KeyListener {
     
     @Override
 	public void keyReleased(KeyEvent e) {
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_SPACE:
-			gp.getPlayer().setUp(false);
+		switch (Gamestate.state) {
+		case MENU:
 			break;
-		case KeyEvent.VK_A:
-			gp.getPlayer().setLeft(false);
+		case PLAYING:
+			gp.getPlaying().keyReleased(e);
 			break;
-		case KeyEvent.VK_S:
-			gp.getPlayer().setDown(false);
+		default:
 			break;
-		case KeyEvent.VK_D:
-			gp.getPlayer().setRight(false);
-			break;
+
 		}
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_SPACE:
-			gp.getPlayer().setUp(true);
+		switch (Gamestate.state) {
+		case MENU:
 			break;
-		case KeyEvent.VK_A:
-			gp.getPlayer().setLeft(true);
+		case PLAYING:
+			gp.getPlaying().keyPressed(e);
 			break;
-		case KeyEvent.VK_S:
-			gp.getPlayer().setDown(true);
-			break;
-		case KeyEvent.VK_D:
-			gp.getPlayer().setRight(true);
+		default:
 			break;
 		}
 	}
