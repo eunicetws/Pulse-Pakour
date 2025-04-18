@@ -15,10 +15,12 @@ public class Playing extends State implements Statemethods {
 
     public Playing(GamePanel gp) {
 		super(gp);
-        player.loadSituationData(sh.getCurrentSituation().getSData());
 	}
 
     public void update(){
+		player.loadSituationData1(sh.getCurrentSituation1().getSData());
+		player.loadSituationData2(sh.getCurrentSituation2().getSData());
+		sh.getStop(player.isStop());
         player.update();
         sh.update();
     }
@@ -78,13 +80,13 @@ public class Playing extends State implements Statemethods {
 			getPlayer().setUp(false);
 			break;
 		case KeyEvent.VK_A:
-			getPlayer().setLeft(false);
+
 			break;
 		case KeyEvent.VK_S:
 			getPlayer().setDown(false);
 			break;
 		case KeyEvent.VK_D:
-			getPlayer().setRight(false);
+
 			break;
 		}
 	}
@@ -96,13 +98,13 @@ public class Playing extends State implements Statemethods {
 			getPlayer().setUp(true);
 			break;
 		case KeyEvent.VK_A:
-			getPlayer().setLeft(true);
+
 			break;
 		case KeyEvent.VK_S:
 			getPlayer().setDown(true);
 			break;
 		case KeyEvent.VK_D:
-			getPlayer().setRight(true);
+
 			break;
 		}
 	}

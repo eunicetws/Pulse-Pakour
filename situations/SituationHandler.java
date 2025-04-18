@@ -5,21 +5,27 @@ import utilz.LoadSave;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 public class SituationHandler {
     private int rows = GamePanel.SCREEN_HEIGHT / GamePanel.TILE_SIZE;
     private int cols = GamePanel.SCREEN_WIDTH / GamePanel.TILE_SIZE;
-    private int sTick = 0, sSpeed = 10;
+    private int sTick = 0, sSpeed = 1;
     public static int sOffset = 0;
     private int drawnCols = 0;
     private BufferedImage[] tile;
-    private Situation situation1, situation2;
-    private Situation S1, S2;
+    private Situation[] situations = new Situation[2];
+    private Random rand = new Random();
+
+    private Situation S1, S2;          
+    private boolean stop;
 
     public SituationHandler(){
         importTileSet();
-        S1 = new Situation(LoadSave.getSData(LoadSave.S1));
-        S2 = new Situation(LoadSave.getSData(LoadSave.S2));
+        situations[0] = new Situation(LoadSave.getSData(LoadSave.S1));
+        situations[1] = new Situation(LoadSave.getSData(LoadSave.S2));
+        S1 = situations[0];
+        S2 = situations[1];
     }
 
     private void importTileSet(){
@@ -38,9 +44,14 @@ public class SituationHandler {
         sTick++;
         if (sTick >= sSpeed){
             sTick = 0;
-            sOffset += 1;
-            if (sOffset >= 16 * GamePanel.TILE_SIZE){
+            if (!stop) {
+                sOffset += 1;
+            }
+            if (sOffset >= 15 * GamePanel.TILE_SIZE){
                 sOffset = 0;
+                int n = random();
+                S1 = S2;
+                S2 = situations[n];
             }
         }
         return sOffset;
@@ -69,11 +80,20 @@ public class SituationHandler {
         updateAnimationTick();
     }
 
-    public Situation getCurrentSituation(){
+    private int random(){
+        int n = rand.nextInt(2);
+        return n;
+    }
+
+    public Situation getCurrentSituation1(){
         return S1;
     }
 
     public Situation getCurrentSituation2(){
         return S2;
+    }
+
+    public void getStop(boolean stop){
+        this.stop = stop;
     }
 }
