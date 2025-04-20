@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import gamestates.Gamestate;
 import main.GamePanel;
 import utilz.LoadSave;
-import static utilz.Constants.UI.Buttons.*;
 
 public class Buttons {
 	private int xPos, yPos, width, height, index;
