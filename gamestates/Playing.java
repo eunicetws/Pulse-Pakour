@@ -21,6 +21,7 @@ public class Playing extends State implements Statemethods {
 		player.loadSituationData1(sh.getCurrentSituation1().getSData());
 		player.loadSituationData2(sh.getCurrentSituation2().getSData());
 		sh.getStop(player.isStop());
+		player.setShOffset(sh.getSOffset());
         player.update();
         sh.update();
     }

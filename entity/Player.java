@@ -19,14 +19,15 @@ public class Player extends Entity {
 
 	private int offset_y = 54;
 	private int offset_x = TILE_SIZE + 12;
-    Animation idle, running, jump;
+    Animation running, jump;
+
+	private int sh_offset;
 
     private int[][] situation1, situation2;
 
     public Player(int x, int y, int width, int height){
         super(x, y, width, height);
         running = new Animation(5, 13,"/res/player/player_walk/Chara_BlueWalk");
-        idle = new Animation(20, 19,"/res/player/player_idle/Chara - BlueIdle");
 		initHitbox(x + offset_x, y+offset_y, width, height);
     }
 
@@ -49,7 +50,6 @@ public class Player extends Entity {
 
     private void updatePos() {
 
-		float xSpeed = 0;
 	 	if (up)
 			jump();
 
@@ -61,7 +61,6 @@ public class Player extends Entity {
 			if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, situation1, situation2)) {
 				hitbox.y += airSpeed;
 				airSpeed += gravity;
-				updateXPos(xSpeed);
 			} else {
 				if (IsEntityOnFloor(hitbox, situation1, situation2)){
 					inAir = false;
@@ -72,18 +71,11 @@ public class Player extends Entity {
 				}
 			}
 		}
-		if (!CanMoveHere(hitbox.x + 2, hitbox.y, hitbox.width, hitbox.height, situation1, situation2))
+		if (!CanMoveHere(hitbox.x + sh_offset+(1*sh_offset), hitbox.y, hitbox.width, hitbox.height, situation1, situation2))
 			stop = true;
 		else
 			stop = false;
 		
-	}
-	
-
-	private void updateXPos(float xSpeed) {
-		if (CanMoveHere(hitbox.x, hitbox.y, hitbox.width, hitbox.height, situation1, situation2)) {
-			hitbox.x += xSpeed;
-		}
 	}
 
 	public void resetDirBooleans() {
@@ -118,6 +110,10 @@ public class Player extends Entity {
 
 	public boolean isStop() {
 		return stop;
+	}
+
+	public void setShOffset(int sh_offset){
+		this.sh_offset = sh_offset;
 	}
     
 }

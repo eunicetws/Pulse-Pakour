@@ -10,8 +10,9 @@ import java.util.Random;
 public class SituationHandler {
     private int rows = GamePanel.SCREEN_HEIGHT / GamePanel.TILE_SIZE;
     private int cols = GamePanel.SCREEN_WIDTH / GamePanel.TILE_SIZE;
-    private int sTick = 0, sSpeed = 1;
     public static int sOffset = 0;
+    public float sTick = 0, sSpeed = 1;
+    public int sChangeOffset = 5;
     private int drawnCols = 0;
     private BufferedImage[] tile;
     private Situation[] situations = new Situation[2];
@@ -23,7 +24,7 @@ public class SituationHandler {
     public SituationHandler(){
         importTileSet();
         situations[0] = new Situation(LoadSave.getSData(LoadSave.S1));
-        situations[1] = new Situation(LoadSave.getSData(LoadSave.S2));
+        situations[1] = new Situation(LoadSave.getSData(LoadSave.S1));
         S1 = situations[0];
         S2 = situations[1];
     }
@@ -40,18 +41,23 @@ public class SituationHandler {
         tile[49]= null;
     }
 
-    public int updateAnimationTick(){
-        sTick++;
-        if (sTick >= sSpeed){
+    public int updateSituationTick(){
+        sTick += 1;
+        if(sTick >= 5){
             sTick = 0;
-            if (!stop) {
-                sOffset += 1;
-            }
+            if (!stop) 
+                sOffset += (int)sChangeOffset;
             if (sOffset >= 15 * GamePanel.TILE_SIZE){
                 sOffset = 0;
+                sChangeOffset += 1;
+                sSpeed += (sChangeOffset/10f)+0.5f;
                 int n = random();
                 S1 = S2;
                 S2 = situations[n];
+            }
+            if (sSpeed == 5) {
+                
+                sSpeed = 0;
             }
         }
         return sOffset;
@@ -61,7 +67,7 @@ public class SituationHandler {
         for(int j = 0; j  < rows; j++){
             for(int i = 0; i < cols; i++){
                 int index = S1.getTilesIndex(i,j);
-                drawnCols = (GamePanel.TILE_SIZE * i) - sOffset;
+                drawnCols = (GamePanel.TILE_SIZE * i) - sOffset/1;
                 g.drawImage(tile[index], drawnCols, GamePanel.TILE_SIZE * j, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
             }
         }
@@ -77,7 +83,7 @@ public class SituationHandler {
     }
 
     public void update(){
-        updateAnimationTick();
+        updateSituationTick();
     }
 
     private int random(){
@@ -95,5 +101,9 @@ public class SituationHandler {
 
     public void getStop(boolean stop){
         this.stop = stop;
+    }
+
+    public int getSOffset(){
+        return (int)sSpeed;
     }
 }

@@ -4,6 +4,9 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
+import gamestates.Gamestate;
+import gamestates.Gamestate.*;
+
 public class Main {
     public static int WIDTH, HEIGHT;
     public static int WIDTH_RATIO = 16, HEIGHT_RATIO = 9;

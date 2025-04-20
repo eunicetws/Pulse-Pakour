@@ -5,8 +5,7 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import gamestates.Gamestate;
-import gamestates.Playing;
+import gamestates.*;
 
 public class GamePanel extends JPanel implements Runnable{
     public static final int TILE_SIZE = 64;
@@ -19,13 +18,16 @@ public class GamePanel extends JPanel implements Runnable{
 
     Thread gameThread;
     KeyHandler keyH = new KeyHandler(this);
+	MouseHandler MouseH = new MouseHandler(this);
     private Playing playing = new Playing(this);
+	private Menu menu = new Menu(this);
     
 
     public GamePanel() {
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
+		this.addMouseListener(MouseH);
         this.setFocusable(true); //GamePanel focuse on receiving key input
     }
 
@@ -81,6 +83,7 @@ public class GamePanel extends JPanel implements Runnable{
     public void update() {
 		switch (Gamestate.state) {
 		case MENU:
+			menu.update();
 			break;
 		case PLAYING:
 			playing.update();
@@ -94,10 +97,13 @@ public class GamePanel extends JPanel implements Runnable{
     public void paintComponent(Graphics g) {
         switch (Gamestate.state) {
 		case MENU:
+			menu.draw(g);
 			break;
 		case PLAYING:
 			playing.draw(g);
 			break;
+		case CLOSE:
+            System.exit(0);
 		default:
 			break;
 		}
@@ -105,5 +111,9 @@ public class GamePanel extends JPanel implements Runnable{
 
 	public Playing getPlaying() {
 		return playing;
+	}
+
+	public Menu getMenu() {
+		return menu;
 	}
 }
