@@ -20,6 +20,9 @@ public class KeyHandler implements KeyListener {
 		case PLAYING:
 			gp.getPlaying().keyReleased(e);
 			break;
+		case SETTINGS:
+			gp.getSettings().keyReleased(e);
+			break;
 		default:
 			break;
 
@@ -33,6 +36,9 @@ public class KeyHandler implements KeyListener {
 			break;
 		case PLAYING:
 			gp.getPlaying().keyPressed(e);
+			break;
+		case SETTINGS:
+			gp.getSettings().keyPressed(e);
 			break;
 		default:
 			break;

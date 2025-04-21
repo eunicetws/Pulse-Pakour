@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import gamestates.*;
+import utilz.SaveDataHandler;
 
 public class GamePanel extends JPanel implements Runnable{
     public static final int TILE_SIZE = 64;
@@ -21,14 +22,17 @@ public class GamePanel extends JPanel implements Runnable{
 	MouseHandler MouseH = new MouseHandler(this);
     private Playing playing = new Playing(this);
 	private Menu menu = new Menu(this);
+	private Settings settings = new Settings(this);
     
 
     public GamePanel() {
-        this.setBackground(Color.black);
+        this.setBackground(new Color(0x86cad5));
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
 		this.addMouseListener(MouseH);
         this.setFocusable(true); //GamePanel focuse on receiving key input
+		SaveDataHandler.createSaveFile();
+		settings.setControls();
     }
 
     public void startGameThread(){
@@ -84,13 +88,17 @@ public class GamePanel extends JPanel implements Runnable{
 		switch (Gamestate.state) {
 		case MENU:
 			menu.update();
+			playing.setStartTime(menu.getStartTime());
+			playing.setControls(settings.getJump(), settings.getCrouch(), settings.getPause());
 			break;
 		case PLAYING:
 			playing.update();
 			break;
+		case SETTINGS:
+			settings.update();
+			break;
 		default:
 			break;
-
 		}
 	}
 
@@ -101,6 +109,9 @@ public class GamePanel extends JPanel implements Runnable{
 			break;
 		case PLAYING:
 			playing.draw(g);
+			break;
+		case SETTINGS:
+			settings.draw(g);
 			break;
 		case CLOSE:
             System.exit(0);
@@ -115,5 +126,9 @@ public class GamePanel extends JPanel implements Runnable{
 
 	public Menu getMenu() {
 		return menu;
+	}
+
+	public Settings getSettings() {
+		return settings;
 	}
 }

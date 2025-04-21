@@ -15,6 +15,7 @@ public class Menu extends State implements Statemethods {
 	private Buttons[] buttons = new Buttons[3];
 	private BufferedImage backgroundImg;
     Animation idle;
+	boolean startTime;
 
 	public Menu(GamePanel gp) {
 		super(gp);
@@ -37,6 +38,7 @@ public class Menu extends State implements Statemethods {
 	@Override
 	public void update() {
         idle.updateAnimationTick();
+		startTime = true;
 		for (Buttons mb : buttons)
 			mb.update();
 	}
@@ -70,8 +72,9 @@ public class Menu extends State implements Statemethods {
 	public void mouseReleased(MouseEvent e) {
 		for (Buttons mb : buttons) {
 			if (isIn(e, mb)) {
-				if (mb.isMousePressed())
+				if (mb.isMousePressed()){
 					mb.applyGamestate();
+				}
 				break;
 			}
 		}
@@ -83,7 +86,6 @@ public class Menu extends State implements Statemethods {
 	private void resetButtons() {
 		for (Buttons mb : buttons)
 			mb.resetBools();
-
 	}
 
 	@Override
@@ -108,8 +110,10 @@ public class Menu extends State implements Statemethods {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
+	public boolean getStartTime(){
+		return startTime;
+	}
 }

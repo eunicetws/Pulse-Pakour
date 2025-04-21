@@ -11,8 +11,8 @@ public class SituationHandler {
     private int rows = GamePanel.SCREEN_HEIGHT / GamePanel.TILE_SIZE;
     private int cols = GamePanel.SCREEN_WIDTH / GamePanel.TILE_SIZE;
     public static int sOffset = 0;
-    public float sTick = 0, sSpeed = 1;
-    public int sChangeOffset = 5;
+    public float sTick = 0, sSpeed = 1, sSpeedCount=1;
+    public int sChangeOffset = 10;
     private int drawnCols = 0;
     private BufferedImage[] tile;
     private Situation[] situations = new Situation[2];
@@ -24,9 +24,10 @@ public class SituationHandler {
     public SituationHandler(){
         importTileSet();
         situations[0] = new Situation(LoadSave.getSData(LoadSave.S1));
-        situations[1] = new Situation(LoadSave.getSData(LoadSave.S1));
+        situations[1] = new Situation(LoadSave.getSData(LoadSave.S2));
         S1 = situations[0];
         S2 = situations[1];
+        sOffset = 0;
     }
 
     private void importTileSet(){
@@ -50,15 +51,14 @@ public class SituationHandler {
             if (sOffset >= 15 * GamePanel.TILE_SIZE){
                 sOffset = 0;
                 sChangeOffset += 1;
-                sSpeed += (sChangeOffset/10f)+0.5f;
+                if (sChangeOffset % 2 == 0) {
+                sSpeedCount += 2;
+            }
                 int n = random();
                 S1 = S2;
                 S2 = situations[n];
             }
-            if (sSpeed == 5) {
-                
-                sSpeed = 0;
-            }
+            sSpeed = (int)((sChangeOffset/4)+sSpeedCount)*2;
         }
         return sOffset;
     }

@@ -29,6 +29,9 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
 		case PLAYING:
 			gp.getPlaying().mouseMoved(e);
 			break;
+		case SETTINGS:
+			gp.getSettings().mouseMoved(e);
+			break;
 		default:
 			break;
 
@@ -44,6 +47,9 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
 			case PLAYING:
 				gp.getPlaying().mouseClicked(e);;
 				break;
+			case SETTINGS:
+				gp.getSettings().mouseClicked(e);
+				break;
 			default:
 				break;
 		}	
@@ -57,6 +63,9 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
 				break;
 			case PLAYING:
 				gp.getPlaying().mousePressed(e);
+				break;
+			case SETTINGS:
+				gp.getSettings().mousePressed(e);
 				break;
 			default:
 				break;
@@ -72,6 +81,9 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
 				break;
 			case PLAYING:
 				gp.getPlaying().mouseReleased(e);
+				break;
+			case SETTINGS:
+				gp.getSettings().mouseReleased(e);
 				break;
 			default:
 				break;

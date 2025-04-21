@@ -39,7 +39,7 @@ public class Buttons {
 
 	public void draw(Graphics g) {
 		g.drawImage(imgs[index], 0, 0, GamePanel.SCREEN_WIDTH, GamePanel.SCREEN_HEIGHT-30, null);
-		// g.drawRect(xPos, yPos, width, height);
+		g.drawRect(xPos, yPos, width, height);
 	}
 
 	public void update() {

@@ -1,15 +1,16 @@
 package entity;
 
 import java.awt.Graphics;
-
+import java.awt.image.BufferedImage;
 
 import main.GamePanel;
 import static utilz.Collision.*;
+import utilz.LoadSave;
 
 public class Player extends Entity {
 	private int TILE_SIZE = GamePanel.TILE_SIZE;
 
-    private boolean up, down, stop;
+    private boolean up, down, stop, death = false;
 	private boolean inAir = false;
 	
 	private float airSpeed = 0f;
@@ -21,6 +22,8 @@ public class Player extends Entity {
 	private int offset_x = TILE_SIZE + 12;
     Animation running, jump;
 
+	private BufferedImage TimerBg;
+
 	private int sh_offset;
 
     private int[][] situation1, situation2;
@@ -28,6 +31,8 @@ public class Player extends Entity {
     public Player(int x, int y, int width, int height){
         super(x, y, width, height);
         running = new Animation(5, 13,"/res/player/player_walk/Chara_BlueWalk");
+		TimerBg = LoadSave.GetSprite("/res/situation_data/time.png");
+
 		initHitbox(x + offset_x, y+offset_y, width, height);
     }
 
@@ -45,11 +50,16 @@ public class Player extends Entity {
 
     public void draw(Graphics g){
         g.drawImage(running.getCurrentFrame(), (int) hitbox.x-offset_x, (int) hitbox.y-offset_y, TILE_SIZE*3, TILE_SIZE*3, null);
-        drawHitbox(g);
+		g.drawImage(TimerBg, 0, 0, GamePanel.SCREEN_WIDTH, GamePanel.SCREEN_HEIGHT, null);
+        //drawHitbox(g);
     }
 
     private void updatePos() {
-
+		if (!CanMoveHere(hitbox.x + sh_offset, hitbox.y, hitbox.width, hitbox.height, situation1, situation2))
+			stop = true;
+		else
+			stop = false;
+			
 	 	if (up)
 			jump();
 
@@ -70,12 +80,10 @@ public class Player extends Entity {
 					airSpeed = fallSpeedAfterCollision;
 				}
 			}
+			if (hitbox.y / GamePanel.TILE_SIZE >= 8) {
+				death = true;
+			}
 		}
-		if (!CanMoveHere(hitbox.x + sh_offset+(1*sh_offset), hitbox.y, hitbox.width, hitbox.height, situation1, situation2))
-			stop = true;
-		else
-			stop = false;
-		
 	}
 
 	public void resetDirBooleans() {
@@ -114,6 +122,10 @@ public class Player extends Entity {
 
 	public void setShOffset(int sh_offset){
 		this.sh_offset = sh_offset;
+	}
+
+	public boolean getDeath(){
+		return death;
 	}
     
 }
