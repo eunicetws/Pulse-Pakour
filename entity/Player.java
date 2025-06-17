@@ -10,12 +10,10 @@ import utilz.LoadSave;
 public class Player extends Entity {
 	private int TILE_SIZE = GamePanel.TILE_SIZE;
 
-    private boolean up, down, stop, death = false;
+    private boolean up, down, stop, death, collide = false;
 	private boolean inAir = false;
 	
-	private float airSpeed = 0f;
-	private float gravity = 0.1f;
-	private float fallSpeedAfterCollision = 1f;
+	private float airSpeed = 0f, gravity = 0.1f, fallSpeedAfterCollision = 1f;
 	private float jumpSpeed = -4.5f;
 
 	private int offset_y = 54;
@@ -55,7 +53,7 @@ public class Player extends Entity {
     }
 
     private void updatePos() {
-		if (!CanMoveHere(hitbox.x + sh_offset, hitbox.y, hitbox.width, hitbox.height, situation1, situation2))
+		if (!CanMoveHere(hitbox.x+sh_offset, hitbox.y, hitbox.width, hitbox.height, situation1, situation2))
 			stop = true;
 		else
 			stop = false;
@@ -82,6 +80,13 @@ public class Player extends Entity {
 			}
 			if (hitbox.y / GamePanel.TILE_SIZE >= 8) {
 				death = true;
+			}
+		}
+		if (stop) {
+			if (!CanMoveHere(hitbox.x , hitbox.y, hitbox.width, hitbox.height, situation1, situation2))
+				collide = true;
+			else if (CanMoveHere(hitbox.x , hitbox.y, hitbox.width, hitbox.height, situation1, situation2)){
+				collide = false;
 			}
 		}
 	}
@@ -126,6 +131,10 @@ public class Player extends Entity {
 
 	public boolean getDeath(){
 		return death;
+	}
+
+	public boolean getCollide(){
+		return collide;
 	}
     
 }

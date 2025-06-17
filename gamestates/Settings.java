@@ -4,6 +4,12 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.InputStream;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import utilz.LoadSave;
 import java.awt.Font;
 import java.awt.Color;
@@ -16,7 +22,7 @@ import utilz.SaveDataHandler;
 public class Settings extends State implements Statemethods {
 
 	private Buttons[] buttons = new Buttons[1];
-	private ButtonsSettings[] buttons2 = new ButtonsSettings[3];
+	private ButtonsSettings[] buttons2 = new ButtonsSettings[2];
 	private BufferedImage backgroundImg;
 	String buttonType = "null";
     Animation idle;
@@ -36,9 +42,9 @@ public class Settings extends State implements Statemethods {
 
 	private void loadButtons() {
 		buttons[0] = new Buttons("/res/settings/buttons1.png", "/res/settings/buttons1.1.png", 437, 447, 160, 50, Gamestate.MENU);
-		buttons2[0] = new ButtonsSettings("/res/settings/buttons4.png", "/res/settings/buttons2.2.png", 363, 185, 305, 70, "jump");
-		buttons2[1] = new ButtonsSettings("/res/settings/buttons3.png", "/res/settings/buttons3.2.png", 363, 275, 305, 70, "crouch");
-		buttons2[2] = new ButtonsSettings("/res/settings/buttons2.png", "/res/settings/buttons4.2.png", 363, 360, 305, 70, "pause");
+		buttons2[0] = new ButtonsSettings("/res/settings/buttons2.png", "/res/settings/buttons2.2.png", 363, 215, 305, 70, "jump");
+		//buttons2[1] = new ButtonsSettings("/res/settings/buttons3.png", "/res/settings/buttons3.2.png", 363, 275, 305, 70, "crouch");
+		buttons2[1] = new ButtonsSettings("/res/settings/buttons4.png", "/res/settings/buttons4.2.png", 363, 308, 305, 70, "pause");
 	}
 
 	@Override
@@ -60,10 +66,32 @@ public class Settings extends State implements Statemethods {
 			mb.draw(g);
 		g.setFont(new Font("Bookman Old Style", Font.BOLD, 30));
 		g.setColor(Color.black);
-		g.drawString(KeyEvent.getKeyText(jump), 533, 235);
-		g.drawString(KeyEvent.getKeyText(crouch), 533, 322);
-		g.drawString(KeyEvent.getKeyText(pause), 533, 408);
+		g.drawString(KeyEvent.getKeyText(jump), 533, 262);
+		// g.drawString(KeyEvent.getKeyText(crouch), 533, 322);
+		g.drawString(KeyEvent.getKeyText(pause), 533, 355);
 	}
+
+	private void playClickSound(String filePath) {
+        try {
+            InputStream audioSrc = getClass().getResourceAsStream(filePath);
+            if (audioSrc == null) {
+                System.out.println("Click sound file not found: " + filePath);
+                return;
+            }
+
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioSrc);
+            Clip clickSound = AudioSystem.getClip();
+            clickSound.open(audioStream);
+
+            // Adjust the volume (optional)
+            // FloatControl gainControl = (FloatControl) clickSound.getControl(FloatControl.Type.MASTER_GAIN);
+            // gainControl.setValue(6.0f); // Increase volume by 6 decibels (adjust as needed)
+
+            clickSound.start(); // Play the click sound
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -90,6 +118,7 @@ public class Settings extends State implements Statemethods {
 		for (Buttons mb : buttons) {
 			if (isIn(e, mb)) {
 				if (mb.isMousePressed()){
+					playClickSound("/res/sounds/button_click.wav"); // Path to your click sound effect
 					mb.applyGamestate();
 				}
 				break;
@@ -98,6 +127,7 @@ public class Settings extends State implements Statemethods {
 		for (ButtonsSettings mb : buttons2){
 			if (isIn2(e, mb)) {
 				if (mb.isMousePressed()){
+					playClickSound("/res/sounds/button_click.wav"); // Path to your click sound effect
 					buttonType = mb.setButton();
 				}
 				break;
@@ -149,15 +179,15 @@ public class Settings extends State implements Statemethods {
 				}
 				buttonType = "null";
 				break;
-			case "crouch":
-				crouch = e.getKeyCode();
-				try {
-					SaveDataHandler.overWriteFile(crouch, 1);
-				} catch (Exception ex) {
+			// case "crouch":
+			// 	crouch = e.getKeyCode();
+			// 	try {
+			// 		SaveDataHandler.overWriteFile(crouch, 1);
+			// 	} catch (Exception ex) {
 					
-				}
-				buttonType = "null";
-				break;
+			// 	}
+			// 	buttonType = "null";
+			// 	break;
 			case "pause":
 				pause = e.getKeyCode();
 				try {
@@ -180,8 +210,8 @@ public class Settings extends State implements Statemethods {
 	public void setControls(){
 		try{
 			jump = SaveDataHandler.ReadFile(0);
-			crouch = SaveDataHandler.ReadFile(1);
-			pause = SaveDataHandler.ReadFile(2);
+			//crouch = SaveDataHandler.ReadFile(1);
+			pause = SaveDataHandler.ReadFile(1);
 		} catch(Exception e){
 
 		}
@@ -191,9 +221,9 @@ public class Settings extends State implements Statemethods {
 		return jump;
 	}
 
-	public int getCrouch(){
-		return crouch;
-	}
+	// public int getCrouch(){
+	// 	return crouch;
+	// }
 
 	public int getPause(){
 		return pause;

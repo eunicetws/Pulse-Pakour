@@ -4,6 +4,12 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.InputStream;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 
 import entity.Animation;
 import main.GamePanel;
@@ -52,6 +58,28 @@ public class Menu extends State implements Statemethods {
 			mb.draw(g);
 	}
 
+	private void playClickSound(String filePath) {
+	    try {
+	        InputStream audioSrc = getClass().getResourceAsStream(filePath);
+	        if (audioSrc == null) {
+	            System.out.println("Click sound file not found: " + filePath);
+	            return;
+	        }
+
+	        AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioSrc);
+	        Clip clickSound = AudioSystem.getClip();
+	        clickSound.open(audioStream);
+
+	        // Adjust the volume
+	        FloatControl gainControl = (FloatControl) clickSound.getControl(FloatControl.Type.MASTER_GAIN);
+	        gainControl.setValue(6.0f); // Increase volume by 6 decibels (adjust as needed)
+
+	        clickSound.start(); // Play the click sound
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
@@ -73,6 +101,7 @@ public class Menu extends State implements Statemethods {
 		for (Buttons mb : buttons) {
 			if (isIn(e, mb)) {
 				if (mb.isMousePressed()){
+					playClickSound("/res/sounds/button_click.wav"); // Path to your click sound effect
 					mb.applyGamestate();
 				}
 				break;

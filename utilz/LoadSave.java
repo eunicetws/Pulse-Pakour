@@ -11,6 +11,7 @@ public class LoadSave {
     public static final String TILE_SPRITE = "/res/tiles/Mossy - TileSet.png";
     public static final String S1 = "/res/situation_data/grid_1.png";
     public static final String S2 = "/res/situation_data/grid_2.png";
+    public static final String S3 = "/res/situation_data/grid_3.png";
     
     public static BufferedImage GetSprite(String fileName) {
 		BufferedImage img = null;

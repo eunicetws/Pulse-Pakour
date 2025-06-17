@@ -15,18 +15,20 @@ public class SituationHandler {
     public int sChangeOffset = 10;
     private int drawnCols = 0;
     private BufferedImage[] tile;
-    private Situation[] situations = new Situation[2];
+    private Situation[] situations = new Situation[3];
     private Random rand = new Random();
 
     private Situation S1, S2;          
-    private boolean stop;
+    private boolean stop, collide;
 
     public SituationHandler(){
         importTileSet();
         situations[0] = new Situation(LoadSave.getSData(LoadSave.S1));
         situations[1] = new Situation(LoadSave.getSData(LoadSave.S2));
+        situations[2] = new Situation(LoadSave.getSData(LoadSave.S3));
         S1 = situations[0];
         S2 = situations[1];
+        S2 = situations[2];
         sOffset = 0;
     }
 
@@ -43,6 +45,9 @@ public class SituationHandler {
     }
 
     public int updateSituationTick(){
+        if(collide){
+            sOffset -= 1;
+        }
         sTick += 1;
         if(sTick >= 5){
             sTick = 0;
@@ -51,14 +56,11 @@ public class SituationHandler {
             if (sOffset >= 15 * GamePanel.TILE_SIZE){
                 sOffset = 0;
                 sChangeOffset += 1;
-                if (sChangeOffset % 2 == 0) {
-                sSpeedCount += 2;
-            }
+                
                 int n = random();
                 S1 = S2;
                 S2 = situations[n];
             }
-            sSpeed = (int)((sChangeOffset/4)+sSpeedCount)*2;
         }
         return sOffset;
     }
@@ -87,7 +89,7 @@ public class SituationHandler {
     }
 
     private int random(){
-        int n = rand.nextInt(2);
+        int n = rand.nextInt(3);
         return n;
     }
 
@@ -104,6 +106,10 @@ public class SituationHandler {
     }
 
     public int getSOffset(){
-        return (int)sSpeed;
+        return sChangeOffset;
+    }
+
+    public void setCollide(boolean collide){
+        this.collide = collide;
     }
 }

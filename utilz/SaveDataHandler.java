@@ -23,7 +23,7 @@ public class SaveDataHandler {
                     System.out.println("File created: " + saveFile.getName());
                     FileWriter write = new FileWriter(saveFile);
                     write.write(Integer.toString(KeyEvent.VK_SPACE)+"\n");
-                    write.write(Integer.toString(KeyEvent.VK_CONTROL)+"\n");
+                    // write.write(Integer.toString(KeyEvent.VK_CONTROL)+"\n");
                     write.write(Integer.toString(KeyEvent.VK_ESCAPE)+"\n");
                     write.write("0\n");
                     write.write("0\n");

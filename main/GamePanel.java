@@ -89,7 +89,7 @@ public class GamePanel extends JPanel implements Runnable{
 		case MENU:
 			menu.update();
 			playing.setStartTime(menu.getStartTime());
-			playing.setControls(settings.getJump(), settings.getCrouch(), settings.getPause());
+			playing.setControls(settings.getJump(), /*settings.getCrouch(),*/ settings.getPause());
 			break;
 		case PLAYING:
 			playing.update();
